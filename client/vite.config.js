@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
+      middlewareMode: "html", // Принудительно проверяет файлы
       '/api/': 'http://localhost:5000',
     }
   },
