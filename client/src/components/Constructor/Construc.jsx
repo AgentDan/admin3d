@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import Constructor from "./Constructor.jsx";
 import {Link} from "react-router-dom";
 import {CiMenuKebab} from "react-icons/ci";
+import Zaglushka from "./Zaglushka.jsx";
 
 const Construc = () => {
     const [projects, setProjects] = useState([]);
@@ -75,11 +76,23 @@ const Construc = () => {
     }
 
     return (
-        <div className="bg-red-600">
+        <div>
             {
-                projectCurrent &&
-                <Constructor setOpenelements={setOpenelements} openelements={openelements} nameFile={projectCurrent}
-                             arr={arr} setArr={setArr}/>
+                projectCurrent ?
+                    <Constructor setOpenelements={setOpenelements}
+                                 openelements={openelements}
+                                 nameFile={projectCurrent}
+                                 arr={arr}
+                                 setArr={setArr}
+                    />
+                    :
+                    <Zaglushka
+                        setOpenelements={setOpenelements}
+                        openelements={openelements}
+                        nameFile={projectCurrent}
+                        arr={arr}
+                        setArr={setArr}
+                    />
             }
             <div
                 className="hover:bg-gray-400 cursor-pointer absolute top-1 right-48 border-4 border-indigo-400 rounded-2xl w-auto px-2 g-8 "

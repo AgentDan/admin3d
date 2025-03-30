@@ -16,13 +16,20 @@ const storageConfig = multer.diskStorage({
 
 const upload = multer({storage: storageConfig});
 
-router.post("/addfile", upload.single('file'), async (req, res) => {
+router.post("/addfile", upload.single([{name: "file"}, {name: "planFile", maxCount: 1}]), async (req, res) => {
     try {
-        const fileName = req.file.originalname
+        const fileName = req.files['file'] ? req.files['file'][0].originalname : null;
+        const filePlane = req.files['planFile'] ? req.files['planFile'][0].originalname : null;
         const userId = req.body.userId
-        const existingFile = await File.findOne({file: fileName})
 
-        if (existingFile) {
+        if (!fileName) {
+            return res.status(400).json({message: "Файл проекта обязателен"});
+        }
+
+        const existingFileName = await File.findOne({file: fileName})
+        const existingFilePlan = await File.findOne({file: filePlan})
+
+        if (existingFileName) {
             return res.status(404).json({message: 'Фаил с таким именем уже существует!'})
         }
 
@@ -31,7 +38,7 @@ router.post("/addfile", upload.single('file'), async (req, res) => {
             file: fileName
         })
 
-        await newFile.save();
+        // await newFile.save();
         res.json({message: 'File upload'})
 
     } catch (error) {

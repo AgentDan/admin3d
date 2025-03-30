@@ -3,6 +3,7 @@ import axios from "axios"
 
 function Files() {
     const [file, setFile] = useState(null)
+    const [planFile, setPlanFile] = useState(null)
     const [files, setFiles] = useState([])
     const [users, setUsers] = useState([])
     const [selectedUser, setSelectedUser] = useState("")
@@ -30,6 +31,12 @@ function Files() {
         const selectedFile = event.target.files[0];
         if (selectedFile) {
             setFile(selectedFile)
+        }
+    }
+    const onChangePlanFile = (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            setPlanFile(selectedFile)
         }
     }
 
@@ -88,18 +95,30 @@ function Files() {
     return (
         <>
             <div>
-                <div className="mt-2 text-2xl mb-2">Upload File:</div>
+                <div className="mt-2 text-2xl mb-2">Upload Project:</div>
                 <input
-                    id="fileInput"
+                    id="projectFileInput"
                     type="file"
                     onChange={onChangeFile}
                     className="hidden"
                 />
                 <label
-                    htmlFor="fileInput"
+                    htmlFor="projectFileInput"
                     className="mx-1 cursor-pointer px-4 py-2 border-2 border-black rounded-lg bg-gray-100 hover:bg-gray-200"
                 >
-                    Choose file
+                    Project file
+                </label>
+                <input
+                    id="planFileInput"
+                    type="file"
+                    onChange={onChangePlanFile}
+                    className="hidden"
+                />
+                <label
+                    htmlFor="planFileInput"
+                    className="mx-1 cursor-pointer px-4 py-2 border-2 border-black rounded-lg bg-gray-100 hover:bg-gray-200"
+                >
+                    Plan file
                 </label>
                 <select
                     value={selectedUser}
@@ -122,7 +141,33 @@ function Files() {
 
                 {errFile && <div className="text-red-600">{errFile}</div>}
 
-                {file && <div className="mt-2 text-gray-700">Selected: {file.name}</div>}
+                {file &&
+                    <div className="mt-2 text-gray-700 flex">Project File: {file.name}
+                        <div
+                            className="cursor-pointer flex justify-center items-center border-2 text-red-600 rounded-2xl w-6 h-6 ml-2 "
+                            onClick={() => {
+                                setFile(null);
+                                document.querySelector("#projectFileInput").value = "";
+                            }}
+                        >
+                            X
+                        </div>
+                    </div>
+                }
+
+                {planFile &&
+                    <div className="mt-2 flex text-gray-700">Plan File: {planFile.name}
+                        <div
+                            className="cursor-pointer flex justify-center items-center border-2 text-red-600 rounded-2xl w-6 h-6 ml-2 "
+                            onClick={() => {
+                                setPlanFile(null);
+                                document.querySelector("#planFileInput").value = "";
+                            }}
+                        >
+                            X
+                        </div>
+                    </div>
+                }
             </div>
             <div>
                 <div className="mt-4 text-2xl">
@@ -140,7 +185,6 @@ function Files() {
                         </option>
                     ))}
                 </select>
-
                 <table className="table-auto border-collapse border border-gray-300 w-full">
                     <tbody>
                     <tr className="bg-gray-300">
@@ -167,10 +211,8 @@ function Files() {
                             )
                         })
                     }
-
                     </tbody>
                 </table>
-
             </div>
         </>
     )
